@@ -3,7 +3,7 @@ import string
 import csv
 import tkinter
 from tkinter import messagebox
-
+from tkinter import filedialog
 
 def generate_password(length, include_special_chars):
     characters = string.ascii_letters + string.digits
@@ -13,7 +13,6 @@ def generate_password(length, include_special_chars):
     return password
 
 def generate_password_and_save():
-    web = web_entry.get()
     user = user_entry.get()
     length = int(length_entry.get())
     include_special_chars = special_chars_var.get()
@@ -23,11 +22,12 @@ def generate_password_and_save():
     password_output.insert(tkinter.END, password)
 
     # Enregistrement du mot de passe dans un fichier CSV
-    filename = 'mot_de_passe.csv'
-    with open(filename, 'w', newline='') as csvfile:
-        writer = csv.writer(csvfile)
-        writer.writerow([web, user, password])
-    messagebox.showinfo("Enregistrement terminé", f"Le mot de passe a été enregistré dans {filename}")
+    filename = f"{web_entry.get()}.csv"
+    if filename:
+        with open(filename, 'a', newline='') as csvfile:
+            writer = csv.writer(csvfile)
+            writer.writerow([user, password])
+        messagebox.showinfo("Enregistrement terminé", f"Le mot de passe a été enregistré dans {filename}")
 
 # Création de la fenêtre principale
 window = tkinter.Tk()
