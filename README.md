@@ -1,4 +1,4 @@
-# mot_de_passe
+# Password_generator
 
 ## About me 
 
