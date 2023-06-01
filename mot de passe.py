@@ -2,8 +2,12 @@ import random
 import string
 import csv
 import tkinter
+import hashlib
+import os
 from tkinter import messagebox
-from tkinter import filedialog
+
+
+os.chdir('C:\Test')
 
 def generate_password(length, include_special_chars):
     characters = string.ascii_letters + string.digits
@@ -12,21 +16,29 @@ def generate_password(length, include_special_chars):
     password = ''.join(random.choice(characters) for _ in range(length))
     return password
 
+def hash_password(password):
+    salt = "mysecret"  # Sel secret pour renforcer le hachage
+    hashed_password = hashlib.sha256((password + salt).encode()).hexdigest()
+    return hashed_password
+
+
 def generate_password_and_save():
+    web = web_entry.get()
     user = user_entry.get()
     length = int(length_entry.get())
     include_special_chars = special_chars_var.get()
 
     password = generate_password(length, include_special_chars)
+    hashed_password = hash_password(password)
     password_output.delete("1.0", tkinter.END)
     password_output.insert(tkinter.END, password)
 
     # Enregistrement du mot de passe dans un fichier CSV
-    filename = f"{web_entry.get()}.csv"
+    filename = "code.csv"
     if filename:
         with open(filename, 'a', newline='') as csvfile:
             writer = csv.writer(csvfile)
-            writer.writerow([user, password])
+            writer.writerow([web, user, hashed_password])
         messagebox.showinfo("Enregistrement terminé", f"Le mot de passe a été enregistré dans {filename}")
 
 # Création de la fenêtre principale
@@ -56,7 +68,7 @@ generate_button = tkinter.Button(window, text="Générer et Enregistrer", comman
 generate_button.pack()
 
 # Sortie du mot de passe généré
-password_output = tkinter.Text(window, height=1, width=30)
+password_output = tkinter.Text(window, height=1, width=64)
 password_output.pack()
 
 # Lancement de la boucle principale de l'interface
