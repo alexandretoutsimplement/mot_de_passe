@@ -14,25 +14,6 @@ length_entry = 0
 special_chars_var = False
 password_output = "ABC"
 
-def generate_password_and_save():
-    web = web_entry.get()
-    user = user_entry.get()
-    length = int(length_entry.get())
-    include_special_chars = special_chars_var.get()
-
-    password = generate_password(length, include_special_chars)
-    hashed_password = hash_password(password)
-    password_output.delete("1.0", tkinter.END)
-    password_output.insert(tkinter.END, password)
-
-    # Enregistrement du mot de passe dans un fichier CSV
-    filename = "code.csv"
-    if filename:
-        with open(filename, 'a', newline='') as csvfile:
-            writer = csv.writer(csvfile)
-            writer.writerow([web, user, hashed_password])
-        messagebox.showinfo("It's save")
-
 # Création de la fenêtre génération de mot de passe
 def window_generator_password():
     window = tkinter.Tk()
